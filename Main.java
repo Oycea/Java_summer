@@ -1,43 +1,67 @@
 package ru.ac.uniyar.mf.summer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        String f_num, s_num, operator;
         Scanner in = new Scanner(System.in);
+        String str, num;
+        int num_operations;
+        List<String> all_ex = new ArrayList<String>();
 
-        System.out.println("Введите выражение: ");
+        num = in.nextLine();
+        num_operations = Integer.parseInt(num);
+        for (int i = 0; i < num_operations; i++) {
+            System.out.println("Введите выражение: ");
+            str = in.nextLine();
+            all_ex.add(str);
+        }
 
-        f_num = in.next();
-        operator = in.next();
-        s_num = in.next();
+        for (int i = 0; i < num_operations; i++) {
+            String[] parts = all_ex.get(i).split(" ");
+            System.out.println((i + 1) + ") " + calculate(parts[0], parts[1], parts[2]));
+        }
+    }
 
-        String answer = calculate(f_num, operator, s_num);
-        System.out.println(answer);
+    public static Fraction create_Fraction(String fraction) {
+        String[] data = fraction.split("/");
+        if (data.length == 1) {
+            return new Fraction(Integer.parseInt(data[0]));
+        }
+        return new Fraction(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
     }
 
     public static String calculate(String fnum, String operation, String snum) {
-        double num1 = Double.parseDouble(fnum);
-        double num2 = Double.parseDouble(snum);
+        Fraction num1 = create_Fraction(fnum);
+        Fraction num2 = create_Fraction(snum);
+
+        if(num1.denomin_is_zero()){
+            return "Знаменатель первой дроби равен нулю!";
+        }
+        if(num2.denomin_is_zero()){
+            return "Знаменатель второй дроби равен нулю!";
+        }
+
         switch (operation) {
             case "+":
-               return Double.toString(num1 + num2);
+                return num1.sum(num2).toString();
             case "-":
-                return Double.toString(num1 - num2);
+                return num1.subtraction(num2).toString();
             case "*":
-                return Double.toString(num1 * num2);
+                return num1.multiplication(num2).toString();
             case "/":
-                if (num2 == 0) {
+                if (num2.is_zero() == true) {
                     return "Деление на ноль!";
                 }
                 else {
-                    return Double.toString(num1 / num2);
+                    return num1.division(num2).toString();
                 }
             default:
-                return "Nothing";
+                return "Неверная операция!";
         }
     }
 }

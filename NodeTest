@@ -1,0 +1,21 @@
+import org.junit.jupiter.api.Test;
+import ru.ac.uniyar.mf.summer.Node;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class NodeTest {
+
+    @Test
+     void createNode(){
+        Node node = new Node("ROOT");
+        assertEquals("ROOT", node.getName());
+    }
+
+    @Test
+    void addNode(){
+        Node root = new Node("ROOT");
+        Node child = new Node("LIST");
+        root.add(child);
+        assertEquals(1, root.getChilds().size());
+        assertEquals("LIST", root.getChilds().get(0).getName());
+    }
+}
